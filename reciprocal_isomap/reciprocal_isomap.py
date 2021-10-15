@@ -138,11 +138,15 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         # compute k-nearest neighbor distances 
         neighbor_distance_matrix = neighbors_estimator.kneighbors_graph(X=X, mode="distance")
         neighbor_matrix = neighbor_distance_matrix.copy()
+        neighbor_matrix.data[np.isinf(neighbor_matrix.data)] = 0                                      
+        neighbor_matrix.data[np.isnan(neighbor_matrix.data)] = 0                                      
+        neighbor_matrix.eliminate_zeros()
         neighbor_matrix.data[:] = 1 # set all non-empty values to 1
+
 
         # TODO: try using RBF-based kernel or distance cutoff to determine
         #       reciprocal neighbors
-
+        # neighbor_matrix = neighbor_distance_matrix < self.eps
 
         # check for symmetric distance matrix
         if neighbor_matrix.shape[0] == neighbor_matrix.shape[1]:
@@ -188,26 +192,18 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             geodesic_distance_matrix = graph_shortest_path(
                   neighbor_distance_matrix, method="auto", directed=False
             )
-            
-            # convert to sparse
-            geodesic_distance_matrix = csr_matrix(geodesic_distance_matrix)
-            geodesic_distance_matrix.eliminate_zeros()
 
         elif self.distance_mode == "csgraph":
 
+            # compute shortest path distances using weight matrix
             geodesic_distance_matrix = csgraph.shortest_path(
                 neighbor_distance_matrix, method='auto', 
                 directed=False, unweighted=False, 
             )
 
-            # convert to sparse
-            geodesic_distance_matrix = csr_matrix(geodesic_distance_matrix)
-            geodesic_distance_matrix.eliminate_zeros()
-
         elif self.distance_mode == "landmark":
             
-            # check landmarks 
-
+            # TODO: check landmarks 
             # only compute distances to the landmarks (i.e., indices=landmarks)
             landmark_distance_matrix = csgraph.dijkstra(
                 neighbor_distance_matrix, 
@@ -217,18 +213,24 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             geodesic_distance_matrix = np.zeros(neighbor_distance_matrix.shape)
             geodesic_distance_matrix[:,landmarks] = landmark_distance_matrix.T 
 
-            # convert to sparse
-            geodesic_distance_matrix = csr_matrix(geodesic_distance_matrix)
-            geodesic_distance_matrix.eliminate_zeros()
+            # TODO: do we need to make this symmetric?
 
         else:
+
+            # just use the weighted graph as the distance matrix
             geodesic_distance_matrix = neighbor_distance_matrix.copy()
 
 
+        # convert to sparse array (if not already)
+        if not issparse(geodesic_distance_matrix):
+            geodesic_distance_matrix = csr_matrix(geodesic_distance_matrix)
+        
         # TODO: figure out how to connect un-connected components?
-        # just get rid of infs for now by setting to 0 
+        # set infs to 0 for now, eliminate zeros
         geodesic_distance_matrix.data[np.isinf(geodesic_distance_matrix.data)] = 0                                      
+        geodesic_distance_matrix.eliminate_zeros()
 
+       
         # update neighbors estimator?
         self.neighbors_estimator_ = neighbors_estimator
         return geodesic_distance_matrix
@@ -331,8 +333,9 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         # compute new embedding
         G_X **= -0.5 * G_X ** 2
         embedded = self.kernel_pca_.transform(G_X)
+
+        # return embedded, distances (optional)
         if return_distances:
             return embedded, min_distances
-
         return embedded
 

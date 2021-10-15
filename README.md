@@ -33,7 +33,7 @@ pip install git+https://github.com/calebgeniesse/reciprocal_isomap.git
 Alternatively, you can also clone the repository and build from source. 
 ```bash
 git clone git@github.com:calebgeniesse/reciprocal_isomap.git
-cd pcluster
+cd reciprocal_isomap
 
 pip install -r requirements.txt
 pip install -e .

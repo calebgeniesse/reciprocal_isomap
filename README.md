@@ -80,6 +80,5 @@ embedding = r_isomap.fit_transform(X)
 Alternatively, fit your model to the data, and then transform the same data, or project new data into the embedding. 
 
 ```python
-r_isomap.fit(X)
-embedding = r_isomap.transform(X[:10])
+embedding = r_isomap.fit(X).transform(X[:10])
 ```

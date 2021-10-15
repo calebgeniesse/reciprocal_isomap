@@ -59,7 +59,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         #  metric_params : 
 
         n_jobs : int or None, optional (default=None)
-            Number of CPUs to use during the cross validation.
+            Number of CPUs to use for NearestNeighbors and KernalPCA
             
             Possible inputs:
             - ``None`` means 1 unless in a `joblib.parallel_backend` context.

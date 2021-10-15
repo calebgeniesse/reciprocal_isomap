@@ -52,7 +52,7 @@ See below for a few examples using `reciprocal_isomap`.
 ### The `ReciprocalIsomap` object
 
 
-Here, we will walk through the simple usage of the `ReciprocalIsomap`.
+Here, we will walk through a simple example using `ReciprocalIsomap`.
 
 ```python
 from reciprocal_isomap import ReciprocalIsomap

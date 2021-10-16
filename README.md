@@ -40,39 +40,40 @@ pip install -e .
 
 
 
-
 ## Usage
-
-See below for a few examples using `reciprocal_isomap`. 
-
 
 ### The `ReciprocalIsomap` object
 
-
 Here, we will walk through a simple example using `ReciprocalIsomap`.
 
-First, let's generate some random data points.
 ```python
 import numpy as np 
-X = np.random.random((100, 10))
-```
-
-Next, configure the `ReciprocalIsomap` object.
-```python
 from reciprocal_isomap import ReciprocalIsomap
-r_isomap = ReciprocalIsomap(n_neighbors=8)
-```
 
-Then simply fit the model and transform your data.
-```python
+# generate some random data points.
+X = np.random.random((100, 10))
+
+# configure the ReciprocalIsomap object
+r_isomap = ReciprocalIsomap(n_neighbors=8)
+
+# fit and transform the data in a single step
 embedding = r_isomap.fit_transform(X)
 ```
 
-Alternatively, fit your model to the data, and then transform the same data, or project new data into the embedding. 
+We can also fit the data, and then project points into the embedding.
 
 ```python
-embedding = r_isomap.fit(X).transform(X[:10])
+# fit the data and then transform a subset of the data
+embedding = r_isomap.fit(X).transform(X[1::2])
 ```
+
+Similarly, we can project new unseen data points into the embedding.
+
+```python
+# fit a subset of the data and then transform the other half of the data 
+embedding = r_isomap.fit(X[0::2]).transform(X[1::2])
+```
+
 
 
 
@@ -126,3 +127,10 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 <img src="https://github.com/calebgeniesse/reciprocal_isomap/blob/main/examples/r_isomap_cme_subject_7.png?raw=true">
 </a>
 </p>
+
+
+
+
+
+
+

@@ -54,21 +54,17 @@ See below for a few examples using `reciprocal_isomap`.
 
 Here, we will walk through a simple example using `ReciprocalIsomap`.
 
-```python
-from reciprocal_isomap import ReciprocalIsomap
-```
-
 First, let's generate some random data points.
 ```python
 import numpy as np 
 
-# create some data
 X = np.random.random((100, 10))
 ```
 
 Next, configure the `ReciprocalIsomap` object.
 ```python
-# initize the model
+from reciprocal_isomap import ReciprocalIsomap
+
 r_isomap = ReciprocalIsomap(n_neighbors=8)
 ```
 
@@ -89,6 +85,10 @@ embedding = r_isomap.fit(X).transform(X[:10])
 
 Here, we compare embeddings created using `Isomap` and `ReciprocalIsomap` across several values of the `n_neighbors` parameter.
 
+```python
+
+```
+
 First, let's plot the embeddings from `Isomap`.
 
 ```python
@@ -97,12 +97,11 @@ import matplotlib.pyplot as plt
 
 try_n_neighbors = [3, 4, 5, 6]
 
-fig, axes = plt.subplots(1, len(try_n_neighbors), figsize=(6*len(try_n_neighbors), 5))
+fig, axes = plt.subplots(1, 4, figsize=(24, 5))
 for i,n_neighbors in enumerate(try_n_neighbors):
-    
     isomap = Isomap(n_neighbors=n_neighbors)
     embedding = isomap.fit_transform(X)
-    axes[i].scatter(embedding[:,0], embedding[:,1], c=y)
+    axes[i].scatter(embedding[:,0], embedding[:,1], c=y, cmap='Spectral_r')
     axes[i].set_title(f"Isomap(n_neighbors={n_neighbors})", fontweight='bold') 
 ```
 
@@ -122,11 +121,11 @@ import matplotlib.pyplot as plt
 
 try_n_neighbors = [3, 4, 5, 6]
 
-fig, axes = plt.subplots(1, len(try_n_neighbors), figsize=(6*len(try_n_neighbors), 5))
+fig, axes = plt.subplots(1, 4, figsize=(24, 5))
 for i,n_neighbors in enumerate(try_n_neighbors):
     r_isomap = ReciprocalIsomap(n_neighbors=n_neighbors)
     embedding = r_isomap.fit_transform(X)
-    axes[i].scatter(embedding[:,0], embedding[:,1], c=y)
+    axes[i].scatter(embedding[:,0], embedding[:,1], c=y, cmap='Spectral_r')
     axes[i].set_title(f"ReciprocalIsomap(n_neighbors={n_neighbors})", fontweight='bold')
 ```
 

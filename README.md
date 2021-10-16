@@ -57,14 +57,12 @@ Here, we will walk through a simple example using `ReciprocalIsomap`.
 First, let's generate some random data points.
 ```python
 import numpy as np 
-
 X = np.random.random((100, 10))
 ```
 
 Next, configure the `ReciprocalIsomap` object.
 ```python
 from reciprocal_isomap import ReciprocalIsomap
-
 r_isomap = ReciprocalIsomap(n_neighbors=8)
 ```
 

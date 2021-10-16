@@ -35,8 +35,6 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
         n_components : int, number of components to use for embedding
 
-        landmarks : array, indices of data points to use as landmarks
-
         distance_mode : str, method for computing geodesic distances
 
             Possible inputs:
@@ -78,9 +76,8 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
     """
 
     def __init__(self, 
-                 n_neighbors=8, 
+                 n_neighbors=5, 
                  n_components=2, 
-                 landmarks=None,
                  distance_mode="geodesic",  # geodesic, csgraph, landmark, 
                  neighbors_mode="distance", # connectivity or distance
                  neighbors_estimator=None,
@@ -91,7 +88,6 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         ):         
         self.n_neighbors = n_neighbors
         self.n_components = n_components
-        self.landmarks = landmarks
         self.distance_mode = distance_mode 
         self.neighbors_mode = neighbors_mode
         self.neighbors_estimator = neighbors_estimator 
@@ -107,16 +103,11 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         """ Construct geodesic distance matrix from XA.
         """
 
-        if landmarks is None:
-            landmarks = self.landmarks
-
-        if landmarks is None:
-            landmarks = np.arange(X.shape[0])
-
+        # check neighbors estimator
         if neighbors_estimator is None:
             neighbors_estimator = self.neighbors_estimator
         
-         # check estimators, clusterers, etc.
+        # setup neighbors estimator (if needed)
         if neighbors_estimator is None:
             neighbors_estimator = NearestNeighbors(
                 n_neighbors=self.n_neighbors,
@@ -129,35 +120,35 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         # fit to the data, if needed
         if not hasattr(neighbors_estimator, 'n_samples_fit_'):
             neighbors_estimator.fit(X)
-        
-        # fit to new data?
-        if neighbors_estimator.n_samples_fit_ != X.shape[0]:
+        elif neighbors_estimator.n_samples_fit_ != X.shape[0]:
             neighbors_estimator.fit(X)
             
 
-        # compute k-nearest neighbor distances 
-        neighbor_distance_matrix = neighbors_estimator.kneighbors_graph(X=X, mode="distance")
+        # compute k-nearest neighbor distances (not including self)
+        neighbor_distance_matrix = neighbors_estimator.kneighbors_graph(
+             X=X, n_neighbors=self.n_neighbors+1, mode="distance"
+        )
+        neighbor_distance_matrix.data[np.isinf(neighbor_distance_matrix.data)] = 0                                      
+        neighbor_distance_matrix.data[np.isnan(neighbor_distance_matrix.data)] = 0 
+        neighbor_distance_matrix.eliminate_zeros()
         neighbor_matrix = neighbor_distance_matrix.copy()
-        neighbor_matrix.data[np.isinf(neighbor_matrix.data)] = 0                                      
-        neighbor_matrix.data[np.isnan(neighbor_matrix.data)] = 0                                      
-        neighbor_matrix.eliminate_zeros()
         neighbor_matrix.data[:] = 1 # set all non-empty values to 1
-
-
+     
         # TODO: try using RBF-based kernel or distance cutoff to determine
         #       reciprocal neighbors
         # neighbor_matrix = neighbor_distance_matrix < self.eps
+
 
         # check for symmetric distance matrix
         if neighbor_matrix.shape[0] == neighbor_matrix.shape[1]:
 
             # drop non-reciprocal connections
             neighbor_matrix = neighbor_matrix.multiply(neighbor_matrix.T)
-            check_symmetric(neighbor_matrix)
+            # check_symmetric(neighbor_matrix)
 
             #  drop non-reciprocal distances
             neighbor_distance_matrix = neighbor_distance_matrix.multiply(neighbor_matrix)
-            check_symmetric(neighbor_distance_matrix)
+            # check_symmetric(neighbor_distance_matrix)
 
         else:
             
@@ -203,7 +194,10 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
         elif self.distance_mode == "landmark":
             
-            # TODO: check landmarks 
+            # check for landmarks 
+            if landmarks is None:
+                landmarks = np.arange(X.shape[0])
+
             # only compute distances to the landmarks (i.e., indices=landmarks)
             landmark_distance_matrix = csgraph.dijkstra(
                 neighbor_distance_matrix, 
@@ -213,12 +207,14 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             geodesic_distance_matrix = np.zeros(neighbor_distance_matrix.shape)
             geodesic_distance_matrix[:,landmarks] = landmark_distance_matrix.T 
 
-            # TODO: do we need to make this symmetric?
-
         else:
 
             # just use the weighted graph as the distance matrix
-            geodesic_distance_matrix = neighbor_distance_matrix.copy()
+            # geodesic_distance_matrix = neighbor_distance_matrix.copy()
+            raise Exception(
+                f"Distance mode '{self.distance_mode}' is not valid. "
+                f"Possible values include {'geodesic', 'csgraph', 'landmark'}."
+            )
 
 
         # convert to sparse array (if not already)
@@ -228,11 +224,17 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         # TODO: figure out how to connect un-connected components?
         # set infs to 0 for now, eliminate zeros
         geodesic_distance_matrix.data[np.isinf(geodesic_distance_matrix.data)] = 0                                      
+        geodesic_distance_matrix.data[np.isnan(geodesic_distance_matrix.data)] = 0                                      
         geodesic_distance_matrix.eliminate_zeros()
 
        
-        # update neighbors estimator?
+        # store sparse arrays? (skip to reduce memory footprint)
+        # self.neighbor_matrix_ = neighbor_matrix
+        # self.neighbor_distance_matrix_ = neighbor_distance_matrix
+        # self.geodesic_distance_matrix_ = geodesic_distance_matrix
         self.neighbors_estimator_ = neighbors_estimator
+
+        # return geodesic distance matrix
         return geodesic_distance_matrix
 
 
@@ -270,7 +272,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         return self.fit(X, y=y, landmarks=landmarks).embedding_
   
    
-    def transform(self, X, n_neighbors=1, return_distances=False):
+    def transform(self, X, n_neighbors=1, return_distance=False):
         """Transform new X.
 
         This is implemented by linking the points X into the graph of geodesic
@@ -322,20 +324,21 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         n_queries = distances.shape[0]
         G_X = np.zeros((n_queries, n_samples_fit))
         for i in range(n_queries):
+            
             if self.neighbors_mode == 'connectivity':
-                # mask_positive_finite = (distances[i] > 0) & (distances[i] < np.inf)
-                # distances[i][mask_positive_finite] = 1.
-                distances[i][:] = 1.
+                mask_positive_finite = (distances[i] > 0) & (distances[i] < np.inf)
+                distances[i][mask_positive_finite] = 1
+                # distances[i][:] = 1
 
             G_X[i] = np.min(self.dist_matrix_[indices[i]] +
                             distances[i][:, None], 0)
         
         # compute new embedding
-        G_X **= -0.5 * G_X ** 2
+        G_X = -0.5 * G_X ** 2
         embedded = self.kernel_pca_.transform(G_X)
 
         # return embedded, distances (optional)
-        if return_distances:
+        if return_distance:
             return embedded, min_distances
         return embedded
 

@@ -83,9 +83,6 @@ embedding = r_isomap.fit(X).transform(X[:10])
 
 Here, we compare embeddings created using `Isomap` and `ReciprocalIsomap` across several values of the `n_neighbors` parameter.
 
-```python
-
-```
 
 First, let's plot the embeddings from `Isomap`.
 
@@ -105,7 +102,7 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 
 <p align="center">
 <a href="https://github.com/calebgeniesse/reciprocal_isomap/">
-<img src="https://raw.githubusercontent.com/calebgeniesse/reciprocal_isomap/master/examples/isomap_cme_subject_7.png">
+<img src="https://github.com/calebgeniesse/reciprocal_isomap/blob/main/examples/isomap_cme_subject_7.png?raw=true">
 </a>
 </p>
 
@@ -129,6 +126,6 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 
 <p align="center">
 <a href="https://github.com/calebgeniesse/reciprocal_isomap/">
-<img src="https://raw.githubusercontent.com/calebgeniesse/reciprocal_isomap/master/examples/r_isomap_cme_subject_7.png">
+<img src="https://github.com/calebgeniesse/reciprocal_isomap/blob/main/examples/isomap_cme_subject_7.png?raw=true">
 </a>
 </p>

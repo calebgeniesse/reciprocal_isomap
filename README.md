@@ -20,9 +20,6 @@ Note, the `ReciprocalIsomap` class was inspired by scikit-learn's implementation
 * [networkx](https://networkx.github.io)
 
 
-_For a full list of packages, see [`requirements.txt`](https://github.com/calebgeniesse/reciprocal_isomap/blob/master/requirements.txt)._
-
-
 ### Install using pip
 
 Assuming you have the required dependencies, you should be able to install using pip.

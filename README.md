@@ -82,3 +82,56 @@ Alternatively, fit your model to the data, and then transform the same data, or 
 ```python
 embedding = r_isomap.fit(X).transform(X[:10])
 ```
+
+
+
+### Comparison with `Isomap`
+
+Here, we compare embeddings created using `Isomap` and `ReciprocalIsomap` across several values of the `n_neighbors` parameter.
+
+First, let's plot the embeddings from `Isomap`.
+
+```python
+from sklearn.manifold import Isomap
+import matplotlib.pyplot as plt
+
+try_n_neighbors = [3, 4, 5, 6]
+
+fig, axes = plt.subplots(1, len(try_n_neighbors), figsize=(6*len(try_n_neighbors), 5))
+for i,n_neighbors in enumerate(try_n_neighbors):
+    
+    isomap = Isomap(n_neighbors=n_neighbors)
+    embedding = isomap.fit_transform(X)
+    axes[i].scatter(embedding[:,0], embedding[:,1], c=y)
+    axes[i].set_title(f"Isomap(n_neighbors={n_neighbors})", fontweight='bold') 
+```
+
+<p align="center">
+<a href="https://github.com/calebgeniesse/reciprocal_isomap/">
+<img src="https://raw.githubusercontent.com/calebgeniesse/reciprocal_isomap/master/examples/isomap_cme_subject_7.png">
+</a>
+</p>
+
+
+
+Now, let's plot the embeddings from `ReciprocalIsomap`.
+
+```python
+from reciprocal_isomap import ReciprocalIsomap
+import matplotlib.pyplot as plt
+
+try_n_neighbors = [3, 4, 5, 6]
+
+fig, axes = plt.subplots(1, len(try_n_neighbors), figsize=(6*len(try_n_neighbors), 5))
+for i,n_neighbors in enumerate(try_n_neighbors):
+    r_isomap = ReciprocalIsomap(n_neighbors=n_neighbors)
+    embedding = r_isomap.fit_transform(X)
+    axes[i].scatter(embedding[:,0], embedding[:,1], c=y)
+    axes[i].set_title(f"ReciprocalIsomap(n_neighbors={n_neighbors})", fontweight='bold')
+```
+
+<p align="center">
+<a href="https://github.com/calebgeniesse/reciprocal_isomap/">
+<img src="https://raw.githubusercontent.com/calebgeniesse/reciprocal_isomap/master/examples/r_isomap_cme_subject_7.png">
+</a>
+</p>

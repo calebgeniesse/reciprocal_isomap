@@ -126,6 +126,6 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 
 <p align="center">
 <a href="https://github.com/calebgeniesse/reciprocal_isomap/">
-<img src="https://github.com/calebgeniesse/reciprocal_isomap/blob/main/examples/isomap_cme_subject_7.png?raw=true">
+<img src="https://github.com/calebgeniesse/reciprocal_isomap/blob/main/examples/r_isomap_cme_subject_7.png?raw=true">
 </a>
 </p>

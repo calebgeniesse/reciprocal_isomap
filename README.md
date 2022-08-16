@@ -6,7 +6,7 @@ Note, the `ReciprocalIsomap` class was inspired by scikit-learn's implementation
 
 ## Related Projects
 
-- **[NeuMapper.](https://braindynamicslab.github.io/neumapper/)**&nbsp;A scalable Mapper algorithm for neuroimaging data analysis. The Matlab implementation was designed specifically for working with complex, high-dimensional neuroimaging data and produces a shape graph representation that can be annotated with meta-information and further examined using network science tools.
+- [NeuMapper](https://braindynamicslab.github.io/neumapper/) is a scalable Mapper algorithm for neuroimaging data analysis. The Matlab implementation was designed specifically for working with complex, high-dimensional neuroimaging data and produces a shape graph representation that can be annotated with meta-information and further examined using network science tools.
 
 
 

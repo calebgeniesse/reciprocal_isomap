@@ -1,4 +1,4 @@
-# reciprocal_isomap
+# Reciprocal Isomap
 A reciprocal variant of Isomap for robust non-linear dimensionality reduction in Python. 
 
 Note, the `ReciprocalIsomap` class was inspired by scikit-learn's implementation of `Isomap`. The main difference introduced by `ReciprocalIsomap` is a requirement that neighbors in the underlying *k* nearest neighbors graph must be reciprocal (i.e., two points are only considered neighbors if each is a neighbor of the other).
@@ -130,6 +130,12 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 
 
 
+
+
+## **References**
+
+If you find Reciprocal Isomap useful, please consider citing:
+> Geniesse, C., Chowdhury, S., & Saggar, M. (2022). NeuMapper: A Scalable Computational Framework for Multiscale Exploration of the Brain's Dynamical Organization. Network Neuroscience, Advance publication. doi:10.1162/netn_a_00229
 
 
 

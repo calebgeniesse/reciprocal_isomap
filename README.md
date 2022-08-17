@@ -1,7 +1,8 @@
 # Reciprocal Isomap
-A reciprocal variant of Isomap for robust non-linear dimensionality reduction in Python. 
 
-Note, the `ReciprocalIsomap` class was inspired by scikit-learn's implementation of `Isomap`. The main difference introduced by `ReciprocalIsomap` is a requirement that neighbors in the underlying *k* nearest neighbors graph must be reciprocal (i.e., two points are only considered neighbors if each is a neighbor of the other).
+[Reciprocal Isomap](https://calebgeniesse.github.io/reciprocal_isomap) is a reciprocal variant of Isomap for robust non-linear dimensionality reduction in Python. 
+
+The `ReciprocalIsomap` transformer was inspired by scikit-learn's implementation of Isomap, but the reciprocal variant enforces shared connectivity in the underlying *k*-nearest neighbors graph (i.e., two points are only considered neighbors if each is a neighbor of the other).
 
 
 ## Related Projects

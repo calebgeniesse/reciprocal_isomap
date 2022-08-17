@@ -138,7 +138,7 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 ## **Citation**
 
 If you find Reciprocal Isomap useful, please consider citing:
-> Geniesse, C., Chowdhury, S., & Saggar, M. (2022). NeuMapper: A Scalable Computational Framework for Multiscale Exploration of the Brain's Dynamical Organization. Network Neuroscience, Advance publication. doi:10.1162/netn_a_00229
+> Geniesse, C., Chowdhury, S., & Saggar, M. (2022). [NeuMapper: A Scalable Computational Framework for Multiscale Exploration of the Brain's Dynamical Organization](https://doi.org/10.1162/netn_a_00229). *Network Neuroscience*, Advance publication. doi:10.1162/netn_a_00229
 
 
 

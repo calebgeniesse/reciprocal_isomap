@@ -8,12 +8,12 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.neighbors import NearestNeighbors, kneighbors_graph
 from sklearn.utils.validation import check_is_fitted, check_symmetric
-from sklearn.utils.graph import graph_shortest_path
 from sklearn.decomposition import KernelPCA
 from sklearn.preprocessing import KernelCenterer
 
 from scipy import sparse
 from scipy.sparse import block_diag, csr_matrix, issparse, csgraph
+scipy.sparse.csgraph.shortest_path
 
 import networkx as nx
 from networkx.algorithms.shortest_paths.dense import floyd_warshall_numpy as fw
@@ -39,8 +39,8 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
             Possible inputs:
             - 'csgraph' uses ``scipy.sparse.csgraph.shortest_path``
+            - 'geodesic' uses ``scipy.sparse.csgraph.shortest_path`` 
             - 'landmark' uses ``scipy.sparse.csgraph.dijkstra`` to landmarks
-            - 'geodesic' uses ``sklearn.utils.graph.graph_shortest_path`` 
             - 'geodesic_deprecated' computes floyd_warshall_numpy for each subgraph
 
         neighbors_mode : str, type of weights to use for nearest neighbor graph
@@ -176,15 +176,9 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
            
             # set distance matrix
             geodesic_distance_matrix = block_diag(sd, format='csr')
-        
-        elif self.distance_mode == "geodesic":
-        
-            # compute shortest path distances using weight matrix
-            geodesic_distance_matrix = graph_shortest_path(
-                  neighbor_distance_matrix, method="auto", directed=False
-            )
 
-        elif self.distance_mode == "csgraph":
+
+        elif self.distance_mode in ["csgraph", "geodesic"]:
 
             # compute shortest path distances using weight matrix
             geodesic_distance_matrix = csgraph.shortest_path(

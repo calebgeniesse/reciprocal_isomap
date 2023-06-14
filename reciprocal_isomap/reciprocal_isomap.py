@@ -13,7 +13,6 @@ from sklearn.preprocessing import KernelCenterer
 
 from scipy import sparse
 from scipy.sparse import block_diag, csr_matrix, issparse, csgraph
-scipy.sparse.csgraph.shortest_path
 
 import networkx as nx
 from networkx.algorithms.shortest_paths.dense import floyd_warshall_numpy as fw

@@ -1,9 +1,13 @@
-# reciprocal_isomap
-A reciprocal variant of Isomap for robust non-linear dimensionality reduction in Python. 
+# Reciprocal Isomap
 
-Note, the `ReciprocalIsomap` class was inspired by scikit-learn's implementation of `Isomap`. The main difference introduced by `ReciprocalIsomap` is a requirement that neighbors in the underlying *k* nearest neighbors graph must be reciprocal (i.e., two points are only considered neighbors if each is a neighbor of the other).
+[Reciprocal Isomap](https://calebgeniesse.github.io/reciprocal_isomap) is a reciprocal variant of Isomap for robust non-linear dimensionality reduction in Python. 
+
+The `ReciprocalIsomap` transformer was inspired by scikit-learn's implementation of Isomap, but the reciprocal variant enforces shared connectivity in the underlying *k*-nearest neighbors graph (i.e., two points are only considered neighbors if each is a neighbor of the other).
 
 
+## Related Projects
+
+- [NeuMapper](https://braindynamicslab.github.io/neumapper/) is a scalable Mapper algorithm for neuroimaging data analysis. The Matlab implementation was designed specifically for working with complex, high-dimensional neuroimaging data and produces a shape graph representation that can be annotated with meta-information and further examined using network science tools.
 
 
 
@@ -130,6 +134,12 @@ for i,n_neighbors in enumerate(try_n_neighbors):
 
 
 
+
+
+## **Citation**
+
+If you find Reciprocal Isomap useful, please consider citing:
+> Geniesse, C., Chowdhury, S., & Saggar, M. (2022). [NeuMapper: A Scalable Computational Framework for Multiscale Exploration of the Brain's Dynamical Organization](https://doi.org/10.1162/netn_a_00229). *Network Neuroscience*, Advance publication. doi:10.1162/netn_a_00229
 
 
 

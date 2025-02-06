@@ -251,7 +251,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         )       
     
         # convert to isomap kernel
-        self.kernel_matrix_ = -0.5 * self.dist_matrix_.A ** 2
+        self.kernel_matrix_ = -0.5 * self.dist_matrix_.toarray() ** 2
         
         # compute embedding vectors for data  
         self.embedding_ = self.kernel_pca_.fit_transform(self.kernel_matrix_)

@@ -47,13 +47,6 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             Possible inputs:
             - 'connectivity' uses binary neighbor connectivity as edge weights
             - 'distance' uses neighbor distances as edge weights
-        
-        # TODO
-        #  neighbors_estimator : 
-        #  neighbors_algorithm : 
-        #  metric : 
-        #  p : 
-        #  metric_params : 
 
         n_jobs : int or None, optional (default=None)
             Number of CPUs to use for NearestNeighbors and KernalPCA

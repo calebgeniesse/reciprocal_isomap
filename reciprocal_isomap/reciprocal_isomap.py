@@ -195,8 +195,6 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
         else:
 
-            # just use the weighted graph as the distance matrix
-            # geodesic_distance_matrix = neighbor_distance_matrix.copy()
             raise Exception(
                 f"Distance mode '{self.distance_mode}' is not valid. "
                 f"Possible values include {'geodesic', 'csgraph', 'landmark'}."

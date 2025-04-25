@@ -132,11 +132,9 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
             # drop non-reciprocal connections
             neighbor_matrix = neighbor_matrix.multiply(neighbor_matrix.T)
-            # check_symmetric(neighbor_matrix)
 
             #  drop non-reciprocal distances
             neighbor_distance_matrix = neighbor_distance_matrix.multiply(neighbor_matrix)
-            # check_symmetric(neighbor_distance_matrix)
 
         else:
             

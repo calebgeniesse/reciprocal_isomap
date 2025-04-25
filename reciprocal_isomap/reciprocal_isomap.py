@@ -125,11 +125,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         neighbor_distance_matrix.eliminate_zeros()
         neighbor_matrix = neighbor_distance_matrix.copy()
         neighbor_matrix.data[:] = 1 # set all non-empty values to 1
-     
-        # TODO: try using RBF-based kernel or distance cutoff to determine
-        #       reciprocal neighbors
-        # neighbor_matrix = neighbor_distance_matrix < self.eps
-
+        
 
         # check for symmetric distance matrix
         if neighbor_matrix.shape[0] == neighbor_matrix.shape[1]:

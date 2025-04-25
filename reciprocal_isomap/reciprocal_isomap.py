@@ -40,7 +40,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             - 'csgraph' uses ``scipy.sparse.csgraph.shortest_path``
             - 'geodesic' uses ``scipy.sparse.csgraph.shortest_path`` 
             - 'landmark' uses ``scipy.sparse.csgraph.dijkstra`` to landmarks
-            - 'geodesic_deprecated' computes floyd_warshall_numpy for each subgraph
+            - 'geodesic_fw' computes floyd_warshall_numpy for each subgraph
 
         neighbors_mode : str, type of weights to use for nearest neighbor graph
 
@@ -155,7 +155,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
 
         # construct geodesic distance matrix (slower)
-        if self.distance_mode == "geodesic_deprecated":
+        if self.distance_mode == "geodesic_fw":
             
             # compute block diagonal matrix of geodesic distances
             if issparse(neighbor_distance_matrix):

@@ -140,7 +140,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
             
             # TODO: figure out how to handle non-reciprocal data
             #       e.g., out-of-sample landmarks
-            pass 
+            raise Exception("Distance matrix must be symmetric") 
         
 
         # set the edge weights to 'connectivity' (default='distance')

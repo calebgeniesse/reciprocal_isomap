@@ -70,8 +70,8 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
     def __init__(self, 
                  n_neighbors=5, 
                  n_components=2, 
-                 distance_mode="geodesic",  # geodesic, csgraph, landmark, 
-                 neighbors_mode="distance", # connectivity or distance
+                 distance_mode="geodesic",
+                 neighbors_mode="distance",
                  neighbors_estimator=None,
                  neighbors_algorithm='auto',
                  metric='minkowski', p=1, 

@@ -54,7 +54,7 @@ Here, we will walk through a simple example using `ReciprocalIsomap`.
 import numpy as np 
 from reciprocal_isomap import ReciprocalIsomap
 
-# generate some random data points.
+# generate some random data points
 X = np.random.random((100, 10))
 
 # configure the ReciprocalIsomap object

@@ -6,12 +6,10 @@ Authors: Caleb Geniesse, geniesse@stanford.edu
 """
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.neighbors import NearestNeighbors, kneighbors_graph
-from sklearn.utils.validation import check_is_fitted, check_symmetric
+from sklearn.neighbors import NearestNeighbors
+from sklearn.utils.validation import check_is_fitted
 from sklearn.decomposition import KernelPCA
-from sklearn.preprocessing import KernelCenterer
 
-from scipy import sparse
 from scipy.sparse import block_diag, csr_matrix, issparse, csgraph
 
 import networkx as nx

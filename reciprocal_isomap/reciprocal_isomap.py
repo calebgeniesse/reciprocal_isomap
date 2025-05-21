@@ -317,6 +317,6 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
 
         # return embedded, distances (optional)
         if return_distance:
-            return embedded, min_distances
+            return embedded, distances
         return embedded
 

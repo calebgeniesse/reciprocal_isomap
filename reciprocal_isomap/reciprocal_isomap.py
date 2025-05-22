@@ -294,7 +294,7 @@ class ReciprocalIsomap(BaseEstimator, TransformerMixin):
         # Create the graph of shortest distances from X to
         # training data via the nearest neighbors of X.
         # This can be done as a single array operation, but it potentially
-        # takes a lot of memory.  To avoid that, use a loop:
+        # takes a lot of memory. To avoid that, use a loop.
 
         n_samples_fit = self.neighbors_estimator_.n_samples_fit_
         n_queries = distances.shape[0]

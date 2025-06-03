@@ -2,7 +2,7 @@
 Reciprocal Isomap for robust non-linear dimensionality reduction.
 
 Authors: Caleb Geniesse, geniesse@stanford.edu
-         Samir Chowdhury, samirc@stanford.ed
+         Samir Chowdhury, samirc@stanford.edu
 """
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
